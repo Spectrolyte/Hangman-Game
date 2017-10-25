@@ -30,13 +30,13 @@ document.onkeyup = function () {
 	var CPUword = '';
 	var placeholder = ''.padEnd(CPUword.length, '_');
 
-	var wordBank = [];
+	var wordBank = ['hello','world','coding'];
 	var guessedLetters = [];
 	var letters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
 
 	function generateWord () {
-		var randomNum = Math.floor(Math.random() * letters.length);
-		return letters[randomNum];
+		var randomNum = Math.floor(Math.random() * wordBank.length);
+		return wordBank[randomNum];
 	}
 
 	document.onkeyup = function (event) {
@@ -64,6 +64,10 @@ document.onkeyup = function () {
 				}
 			}
 		}
+		document.getElementById('wins').innerHTML = "Wins :" + wins;
+		document.getElementById('CPUword').innerHTML = "Current Word: " + placeholder;
+		document.getElementById('guessesRemaining').innerHTML = "Guesses Remaining: " + guessesRemaining;
+		document.getElementById('guessedLetters').innerHTML = "Guessed Letters: " + guessedLetters;
 	}
 }
 
