@@ -22,13 +22,11 @@
 				// replace dashes with letters
 			// else if letter doesn't match
 				// decrement guesses remaining
-
-document.onkeyup = function () {
 	var wins = 0;
 	var losses = 0;
 	var guessesRemaining = 10;
 	var CPUword = '';
-	var placeholder = ''.padEnd(CPUword.length, '_');
+	var placeholder = '';
 
 	var wordBank = ['hello','world','coding'];
 	var guessedLetters = [];
@@ -36,31 +34,46 @@ document.onkeyup = function () {
 
 	function generateWord () {
 		var randomNum = Math.floor(Math.random() * wordBank.length);
+		generatedWord = true;
 		return wordBank[randomNum];
 	}
 
+	function generatePlaceholder() {
+		var dashes = [];
+		for (var i=0; i < CPUword.length; i++) {
+			dashes.push('_');
+		}
+		return dashes;
+	}
+
+	function reveal () {
+		// reveals letters if user guessed a letter correctly
+
+	}
+
 	document.onkeyup = function (event) {
-		CPUword = generateWord();
-		if (letters.indexOf(event.key) > -1) {
+		var userGuess = event.key;
+		if (letters.indexOf(userGuess) > -1) {
 			if (guessesRemaining === 0) {
+				alert('you lose');
 				CPUword = generateWord();
+				placeholder = generatePlaceholder();
 			}
-			else if (placeholder.indexOf('-') === -1) {
+			else if (!placeholder.includes('_')) {
 				wins++;
 				guessesRemaining = 10;
 				CPUword = generateWord();
+				placeholder = generatePlaceholder();
 			}
-			else if (guessesRemaining > 0 && guessedLetters.indexOf(event.key) === -1) {
-				guessedLetters.push(event.key);
-				if (CPUword.indexOf(event.key) > -1) {
-					for (var i=0; i < CPUword.length; i++) {
-						if (CPUword.indexOf(event.key) === i) {
-							placeholder[i] = event.key;
-						}
-					}
+			else if (!guessedLetters[userGuess] && guessesRemaining > 0) {
+				guessedLetters.push(userGuess);
+				if (CPUWord.includes(userGuess)) {
+					//replace dashes with letters
+					//concat letters together
+					//display new word
 				}
 				else {
-					guessesRemaining--;
+					guesses--;
 				}
 			}
 		}
@@ -69,7 +82,7 @@ document.onkeyup = function () {
 		document.getElementById('guessesRemaining').innerHTML = "Guesses Remaining: " + guessesRemaining;
 		document.getElementById('guessedLetters').innerHTML = "Guessed Letters: " + guessedLetters;
 	}
-}
+
 
 
 
