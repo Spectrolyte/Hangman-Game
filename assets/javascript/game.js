@@ -23,70 +23,76 @@
 			// else if letter doesn't match
 				// decrement guesses remaining
 
-	//variable declaration
-	var wins = 0;
-	var losses = 0;
-	var guessesRemaining = 10;
-	var CPUword = '';
-	var placeholder = '';
+//variable declaration
+var wins = 0;
+var losses = 0;
+var guessesRemaining = 10;
+var CPUword = '';
+var placeholder = '';
+var initiate = false;
 
-	var wordBank = ['hello','world','coding'];
-	var guessedLetters = [];
-	var letters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
+var wordBank = ['hello','world','coding'];
+var guessedLetters = [];
+var letters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
 
-	//helper functions
-	function generateWord () {
-		var randomNum = Math.floor(Math.random() * wordBank.length);
-		generatedWord = true;
-		return wordBank[randomNum].split('');
+//helper functions
+function generateWord () {
+	var randomNum = Math.floor(Math.random() * wordBank.length);
+	generatedWord = true;
+	return wordBank[randomNum].split('');
+}
+
+function generatePlaceholder() {
+	var dashes = [];
+	for (var i=0; i < CPUword.length; i++) {
+		dashes.push('_');
 	}
+	return dashes;
+}
 
-	function generatePlaceholder() {
-		var dashes = [];
-		for (var i=0; i < CPUword.length; i++) {
-			dashes.push('_');
-		}
-		return dashes;
+function reset () {
+	guessesRemaining = 10;
+	guessedLetters = [];
+	CPUword = generateWord();
+	placeholder = generatePlaceholder();
+}
+
+function checkScore () {
+	if (guessesRemaining === 0) {
+		alert('you lose, play again?');
+		wins = 0;
+		reset();
 	}
-
-	function reset () {
-		guessesRemaining = 10;
-		guessedLetters = [];
-		CPUword = generateWord();
-		placeholder = generatePlaceholder();
+	else if (!placeholder.includes('_')) {
+		alert('you win');
+		wins++;
+		reset();
 	}
+}
 
-	function checkScore () {
-		if (guessesRemaining === 0) {
-			alert('you lose, play again?');
-			wins = 0;
-			reset();
-		}
-		else if (!placeholder.includes('_')) {
-			alert('you win');
-			wins++;
-			reset();
-		}
-	}
+function update () {
+	document.getElementById('wins').innerHTML = "Wins: " + wins;
+	document.getElementById('CPUword').innerHTML = "Current Word: " + placeholder.join(' ');
+	document.getElementById('guessesRemaining').innerHTML = "Guesses Remaining: " + guessesRemaining;
+	document.getElementById('guessedLetters').innerHTML = "Guessed Letters: " + guessedLetters;
+}
 
-	function update () {
-		document.getElementById('wins').innerHTML = "Wins: " + wins;
-		document.getElementById('CPUword').innerHTML = "Current Word: " + placeholder.join('');
-		document.getElementById('guessesRemaining').innerHTML = "Guesses Remaining: " + guessesRemaining;
-		document.getElementById('guessedLetters').innerHTML = "Guessed Letters: " + guessedLetters;
-	}
+//game start
 
-	//game start
+generateWord();
+generatePlaceholder();
+reset();
 
-	generateWord();
-	generatePlaceholder();
-	reset();
+function startGame () {
+	checkScore();
+	update();
+	initiate = true;
+	document.getElementById('start-btn').innerHTML = "Good Luck";
+}
 
-	//when user presses key
-	document.onkeyup = function (event) {
-		checkScore();
-		update();
-
+//when user presses key
+document.onkeyup = function (event) {
+	if (initiate) {
 		var userGuess = event.key;
 		
 		if (letters.indexOf(userGuess) > -1 && !guessedLetters.includes(userGuess) && guessesRemaining > 0) {
@@ -110,6 +116,7 @@
 			update();
 		}
 	}
+}
 
 
 
