@@ -50,7 +50,7 @@
 	}
 
 	function reset () {
-		guesses = 10;
+		guessesRemaining = 10;
 		guessedLetters = [];
 		CPUword = generateWord();
 		placeholder = generatePlaceholder();
@@ -70,7 +70,7 @@
 	}
 
 	function update () {
-		document.getElementById('wins').innerHTML = "Wins :" + wins;
+		document.getElementById('wins').innerHTML = "Wins: " + wins;
 		document.getElementById('CPUword').innerHTML = "Current Word: " + placeholder.join('');
 		document.getElementById('guessesRemaining').innerHTML = "Guesses Remaining: " + guessesRemaining;
 		document.getElementById('guessedLetters').innerHTML = "Guessed Letters: " + guessedLetters;
