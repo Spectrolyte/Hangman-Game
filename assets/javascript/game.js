@@ -29,7 +29,6 @@
 	var guessesRemaining = 10;
 	var CPUword = '';
 	var placeholder = '';
-	var displayWord = '';
 
 	var wordBank = ['hello','world','coding'];
 	var guessedLetters = [];
@@ -70,6 +69,13 @@
 		}
 	}
 
+	function update () {
+		document.getElementById('wins').innerHTML = "Wins :" + wins;
+		document.getElementById('CPUword').innerHTML = "Current Word: " + placeholder.join('');
+		document.getElementById('guessesRemaining').innerHTML = "Guesses Remaining: " + guessesRemaining;
+		document.getElementById('guessedLetters').innerHTML = "Guessed Letters: " + guessedLetters;
+	}
+
 	//game start
 
 	generateWord();
@@ -79,6 +85,8 @@
 	//when user presses key
 	document.onkeyup = function (event) {
 		checkScore();
+		update();
+
 		var userGuess = event.key;
 		
 		if (letters.indexOf(userGuess) > -1 && !guessedLetters.includes(userGuess) && guessesRemaining > 0) {
@@ -92,17 +100,14 @@
 					if (CPUword[i] === userGuess) {
 						placeholder[CPUword.indexOf(userGuess)] = userGuess;
 						CPUword[placeholder.indexOf(userGuess)] = '_';
-						displayWord = placeholder.join('');
 					}
 				}
 			}
 			else {
 				guessesRemaining--;
 			}
-		document.getElementById('wins').innerHTML = "Wins :" + wins;
-		document.getElementById('CPUword').innerHTML = "Current Word: " + displayWord;
-		document.getElementById('guessesRemaining').innerHTML = "Guesses Remaining: " + guessesRemaining;
-		document.getElementById('guessedLetters').innerHTML = "Guessed Letters: " + guessedLetters;
+			checkScore();
+			update();
 		}
 	}
 
