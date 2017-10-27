@@ -22,20 +22,24 @@
 				// replace dashes with letters
 			// else if letter doesn't match
 				// decrement guesses remaining
+
+	//variable declaration
 	var wins = 0;
 	var losses = 0;
 	var guessesRemaining = 10;
 	var CPUword = '';
 	var placeholder = '';
+	var displayWord = '';
 
 	var wordBank = ['hello','world','coding'];
 	var guessedLetters = [];
 	var letters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
 
+	//helper functions
 	function generateWord () {
 		var randomNum = Math.floor(Math.random() * wordBank.length);
 		generatedWord = true;
-		return wordBank[randomNum];
+		return wordBank[randomNum].split('');
 	}
 
 	function generatePlaceholder() {
@@ -46,41 +50,60 @@
 		return dashes;
 	}
 
-	function reveal () {
-		// reveals letters if user guessed a letter correctly
-
+	function reset () {
+		guesses = 10;
+		guessedLetters = [];
+		CPUword = generateWord();
+		placeholder = generatePlaceholder();
 	}
 
-	document.onkeyup = function (event) {
-		var userGuess = event.key;
-		if (letters.indexOf(userGuess) > -1) {
-			if (guessesRemaining === 0) {
-				alert('you lose');
-				CPUword = generateWord();
-				placeholder = generatePlaceholder();
-			}
-			else if (!placeholder.includes('_')) {
-				wins++;
-				guessesRemaining = 10;
-				CPUword = generateWord();
-				placeholder = generatePlaceholder();
-			}
-			else if (!guessedLetters[userGuess] && guessesRemaining > 0) {
-				guessedLetters.push(userGuess);
-				if (CPUWord.includes(userGuess)) {
-					//replace dashes with letters
-					//concat letters together
-					//display new word
-				}
-				else {
-					guesses--;
-				}
-			}
+	function checkScore () {
+		if (guessesRemaining === 0) {
+			alert('you lose, play again?');
+			wins = 0;
+			reset();
 		}
+		else if (!placeholder.includes('_')) {
+			alert('you win');
+			wins++;
+			reset();
+		}
+	}
+
+	//game start
+
+	generateWord();
+	generatePlaceholder();
+	reset();
+
+	//when user presses key
+	document.onkeyup = function (event) {
+		checkScore();
+		var userGuess = event.key;
+		
+		if (letters.indexOf(userGuess) > -1 && !guessedLetters.includes(userGuess) && guessesRemaining > 0) {
+			guessedLetters.push(userGuess);
+			if (CPUword.includes(userGuess)) {
+				//replace dashes with letters
+				//concat letters together
+				//display new word
+				for (var i=0; i < CPUword.length; i++) {
+					// switching placeholder and CPUword chars
+					if (CPUword[i] === userGuess) {
+						placeholder[CPUword.indexOf(userGuess)] = userGuess;
+						CPUword[placeholder.indexOf(userGuess)] = '_';
+						displayWord = placeholder.join('');
+					}
+				}
+			}
+			else {
+				guessesRemaining--;
+			}
 		document.getElementById('wins').innerHTML = "Wins :" + wins;
-		document.getElementById('CPUword').innerHTML = "Current Word: " + placeholder;
+		document.getElementById('CPUword').innerHTML = "Current Word: " + displayWord;
 		document.getElementById('guessesRemaining').innerHTML = "Guesses Remaining: " + guessesRemaining;
 		document.getElementById('guessedLetters').innerHTML = "Guessed Letters: " + guessedLetters;
+		}
 	}
 
 
